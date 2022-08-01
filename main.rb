@@ -55,7 +55,7 @@ class Main
     sleep 3
 
     puts '### Selecting cita reason ###'
-    tie = '4112'
+    tie = '4031'
     @browser.execute(
       %[
         let select = document.querySelector('select[name="tramiteGrupo[1]"]')
@@ -67,7 +67,7 @@ class Main
 
     puts '--- Selected cita reason ---'
     @browser.at_css('#btnAceptar').click
-    sleep 3
+    sleep 5
 
     puts '--- Accepting terms & conditions ---'
     @browser.execute(
@@ -77,29 +77,35 @@ class Main
         element.click()
       ]
     )
-    sleep 3
+    sleep 5
 
-    puts '### Entering NIE ###'
-    nie = %w[Y0413118Y Y1317009C Y9312258D Y1364985H Y6558711E].sample
+    puts '### Entering Passport Info ###'
+    series = %w[FK FZ FB].sample
+    number = rand(100_000..999_999)
     full_name = [
       'TYMOFIJ RYBAK', 'YEHOR KOROL', 'NAZAR SAVCHENKO',
       'STANISLAVA VELYCHKO', 'ANTONINA SLOBODYAN', 'IRYNA LUKYANENKO'
     ].sample
+    year = rand(1_960..2_000)
+    ukraine = 152
     @browser.execute(
       %[
-        document.querySelector('#txtIdCitado').value = "#{nie}"
+        document.querySelector('#txtIdCitado').value = "#{series}#{number}"
         document.querySelector('#txtDesCitado').value = "#{full_name}"
+        document.querySelector('#txtAnnoCitado').value = "#{year}"
+        document.querySelector('#txtPaisNac').value = "#{ukraine}"
+        document.querySelector('#btnEnviar').scrollIntoView()
       ]
     )
     sleep 3
 
-    puts '--- Entered NIE ---'
+    puts '--- Entered Passport Info ---'
     @browser.at_css('#btnEnviar').click
-    sleep 3
+    sleep 5
 
     puts '--- Submitting cita ---'
     @browser.at_css('#btnEnviar').click
-    sleep 3
+    sleep 5
 
     read_final_page
   end
